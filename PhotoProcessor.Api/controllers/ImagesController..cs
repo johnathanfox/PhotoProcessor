@@ -14,7 +14,7 @@ public class ImagesController : ControllerBase
         }
 
         // POR ENQUANTO: Salvar o arquivo localmente para testar
-        var tempPath = Path.Combine("uploads"); // Cria uma pasta 'uploads' no seu projeto
+        var tempPath = Path.Combine("uploads"); // Cria uma pasta 'uploads' no  projeto
         if (!Directory.Exists(tempPath))
         {
             Directory.CreateDirectory(tempPath);
