@@ -1,0 +1,19 @@
+# docker-compose.yml
+version: '3.8' # Versão da sintaxe do Docker Compose
+
+services:
+  db: # Nome do serviço do banco de dados
+    image: postgres:16-alpine # Imagem oficial do PostgreSQL. 'alpine' é uma versão leve.
+    restart: always # Garante que o contêiner reinicie automaticamente se parar
+    environment: # Variáveis de ambiente para configurar o PostgreSQL
+      POSTGRES_DB: photodb # Nome do banco de dados que será criado
+      POSTGRES_USER: user # Usuário do banco de dados
+      POSTGRES_PASSWORD: password # Senha do banco de dados
+    ports: # Mapeamento de portas: HOST:CONTAINER
+      - "5432:5432" # A porta 5432 da sua máquina será mapeada para a porta 5432 do contêiner
+    volumes: # Mapeamento de volumes para persistência de dados
+      - pgdata:/var/lib/postgresql/data # <--- O volume deve ser chamado 'pgdata' aqui
+
+volumes: # <--- Esta seção na raiz do arquivo DEFINE o volume
+  pgdata: # <--- O nome do volume definido aqui DEVE CORRESPONDER ao usado acima
+
