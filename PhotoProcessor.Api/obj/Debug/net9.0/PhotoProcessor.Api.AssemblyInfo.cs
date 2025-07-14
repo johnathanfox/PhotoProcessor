@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("PhotoProcessor.Api")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+9a986f49cebc38b8855ee89e21316a7b8c27d00e")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+53ae6df451adad102f565213e7b7b85d86aa36f2")]
 [assembly: System.Reflection.AssemblyProductAttribute("PhotoProcessor.Api")]
 [assembly: System.Reflection.AssemblyTitleAttribute("PhotoProcessor.Api")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

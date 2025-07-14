@@ -17,7 +17,7 @@ namespace PhotoProcessor.Api.Data
         {
             base.OnModelCreating(modelBuilder);
             // Exemplo: Configurar a propriedade id como chave primaria 
-            modelBuilder.Entity<Image>().HasKey(i => i.id); // Define a chave primária para a entidade Image
+            modelBuilder.Entity<Image>().HasKey(i => i.Id); // Define a chave primária para a entidade Image
             
             //Exemplo de configuração adicional, se necessário
             modelBuilder.Entity<Image>()

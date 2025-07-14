@@ -1,21 +1,31 @@
 // PhotoProcessor.Worker/Program.cs
 
-// Este é o ponto de entrada do meu Worker Service.
+// Este é o meu ponto de entrada para o Worker Service.
 
-// Primeiro, eu crio o 'host' da aplicação.
-// Ele é responsável por gerenciar o ciclo de vida do meu serviço,
-// carregando configurações e variáveis de ambiente, assim como na API.
-using PhotoProcessor.Worker; // Importo o namespace do meu Worker para que ele seja encontrado
+// Importo os namespaces que preciso para configurar o host e o banco de dados.
+using PhotoProcessor.Api.Data; // Preciso acessar o ApplicationDbContext que está na API
+using Microsoft.EntityFrameworkCore; // Para usar o Npgsql com o Entity Framework Core
+using Microsoft.Extensions.Hosting; // Essencial para IHost e HostBuilderContext
+using Microsoft.Extensions.DependencyInjection; // Para registrar serviços como AddHostedService e GetConnectionString
+using Microsoft.Extensions.Configuration; // Para acessar as configurações, tipo a string de conexão
 
+// Crio o 'host' da minha aplicação Worker.
+// Ele é responsável por carregar as configurações (como do appsettings.json)
+// e gerenciar o ciclo de vida do meu serviço em segundo plano.
 IHost host = Host.CreateDefaultBuilder(args)
-    .ConfigureServices(services =>
+    .ConfigureServices((hostContext, services) => // Aqui eu configuro os serviços que meu Worker vai usar.
     {
-        // Aqui eu registro o meu serviço de background (a classe Worker).
-        // Isso informa ao .NET que minha classe 'Worker' deve ser executada
-        // como um serviço de longa duração em segundo plano.
+        // Registro meu Worker principal como um serviço de background.
+        // Isso faz com que o .NET execute a lógica que defini no Worker.cs.
         services.AddHostedService<Worker>();
-    })
-    .Build();
 
-// Finalmente, eu inicio o host, o que faz com que meu Worker comece a rodar.
+        // Configuro a conexão com o banco de dados PostgreSQL.
+        // Uso o ApplicationDbContext, que está no projeto da API,
+        // e pego a string de conexão do meu arquivo de configurações (appsettings.json do Worker).
+        services.AddDbContext<ApplicationDbContext>(options =>
+            options.UseNpgsql(hostContext.Configuration.GetConnectionString("DefaultConnection")));
+    })
+    .Build(); // Construo o host com todas as configurações e serviços definidos.
+
+// Finalmente, inicio o host. Isso faz com que o meu Worker comece a rodar e a fazer seu trabalho.
 host.Run();

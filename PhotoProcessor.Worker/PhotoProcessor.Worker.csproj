@@ -5,6 +5,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>dotnet-PhotoProcessor.Worker-f4bf0fca-2ee1-4b4a-b15c-c03ec374d3f9</UserSecretsId>
+    <RootNamespace>PhotoProcessor.Worker</RootNamespace> <!-- ADICIONADO/VERIFICADO: Define explicitamente o namespace raiz -->
   </PropertyGroup>
 
   <ItemGroup>
@@ -15,5 +16,9 @@
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.6" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.4" />
     <PackageReference Include="SixLabors.ImageSharp" Version="3.1.10" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\PhotoProcessor.Api\PhotoProcessor.Api.csproj" />
   </ItemGroup>
 </Project>

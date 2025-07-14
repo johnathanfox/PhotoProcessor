@@ -1,6 +1,7 @@
 // Início da aplicação (ponto de entrada)
+using PhotoProcessor.Api.Data; // Importa o namespace do contexto de dados
+using Microsoft.EntityFrameworkCore; // Importa o namespace do Entity Framework Core
 
-// Crio o builder da aplicação, que carrega configs e variáveis de ambiente
 var builder = WebApplication.CreateBuilder(args);
 
 // Registro os serviços que vou usar na API
@@ -10,6 +11,8 @@ builder.Services.AddControllers();
 
 // Swagger pra gerar a doc e UI de teste
 builder.Services.AddEndpointsApiExplorer();
+ builder.Services.AddDbContext<ApplicationDbContext>(options =>
+        options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddSwaggerGen();
 
 // Agora eu construo a aplicação
