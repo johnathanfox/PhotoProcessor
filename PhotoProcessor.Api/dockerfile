@@ -1,0 +1,32 @@
+# DcokeFfile para PhotoProcessor.Api
+
+# Build da aplicação
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+WORKDIR /src
+
+# Copia o arquivo de solução e restaura as dependências
+# Isso vai aproveitar o cache do Docker para não precisar restaurar as dependências toda vez que o código mudar
+COPY PhotoProcessor .sln.
+COPY PhotoProcessor .Api/*.csproj PhotoProcessor.Api/
+COPY PhotoProcessor .Worker/*.csproj PhotoProcessor.Worker/
+RUN dotnet restore PhotoProcessor .Api/PhotoProcessor.Api.csproj
+
+# Copia todo o código-fonte
+COPY . .
+WORKDIR /src/PhotoProcessor.Api
+
+# Publica a aplicação para a pasta 'out'
+RUN dotnet publish "PhotoProcessor .Api.csproj" -c Release -o /app/publish /p:UseAppHost=false
+
+# Runtime da aplicação
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
+WORKDIR /app
+
+# Copia os arquivos publicados da etapa de build
+COPY --from=build /app/publish .
+
+# Expõe a porta que a API vai usar (5065)
+EXPOSE 5065
+
+# Define o ponto de entra da aplicação
+ENTRYPOINT ["dotnet", "PhotoProcessor.Api.dll"]
