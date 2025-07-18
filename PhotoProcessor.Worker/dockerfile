@@ -1,4 +1,4 @@
-# Dockerfile para PhotoProcessor.Api
+# Dockerfile para PhotoProcessor.Worker
 
 # Fase 1: Build da aplicação
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
@@ -8,26 +8,22 @@ WORKDIR /src # Define o WORKDIR para a raiz da solução dentro do contêiner
 COPY PhotoProcessor.sln .
 
 # Copia as pastas de projeto (incluindo .csproj e código-fonte)
-# Isso garante que todas as referências de projeto e arquivos de código estejam disponíveis
 COPY PhotoProcessor.Api/ PhotoProcessor.Api/
 COPY PhotoProcessor.Worker/ PhotoProcessor.Worker/
 
 # Restaura as dependências para a SOLUÇÃO INTEIRA
 RUN dotnet restore PhotoProcessor.sln
 
-# Publica a aplicação da API
+# Publica a aplicação do Worker
 # ATENÇÃO: Caminho completo para o .csproj a partir de /src
-RUN dotnet publish "PhotoProcessor.Api/PhotoProcessor.Api.csproj" -c Release -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "PhotoProcessor.Worker/PhotoProcessor.Worker.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
 # Fase 2: Runtime da aplicação
-FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS final
+FROM mcr.microsoft.com/dotnet/runtime:9.0 AS final
 WORKDIR /app
 
 # Copia os arquivos publicados da fase de build
 COPY --from=build /app/publish .
 
-# Expõe a porta que a API vai usar (8080 dentro do contêiner)
-EXPOSE 8080
-
 # Define o ponto de entrada da aplicação
-ENTRYPOINT ["dotnet", "PhotoProcessor.Api.dll"]
+ENTRYPOINT ["dotnet", "PhotoProcessor.Worker.dll"]

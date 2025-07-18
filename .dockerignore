@@ -1,0 +1,23 @@
+# Ignorar pastas de build e IDE
+bin/
+obj/
+.vs/
+.vscode/
+
+# Ignorar arquivos de usuário e de debug
+*.user
+*.suo
+*.pdb
+
+# Ignorar o diretório de uploads local
+# Estes volumes são mapeados para o host, então não precisam estar na imagem Docker
+PhotoProcessor.Api/uploads/
+PhotoProcessor.Api/originals/
+PhotoProcessor.Api/processed/
+
+# Ignorar os arquivos de configuração que serão copiados explicitamente nos Dockerfiles
+# Isso evita que o COPY . . tente copiá-los duas vezes ou de forma indesejada
+PhotoProcessor.Api/appsettings.json
+PhotoProcessor.Api/appsettings.Development.json
+PhotoProcessor.Worker/appsettings.json
+PhotoProcessor.Worker/appsettings.Development.json

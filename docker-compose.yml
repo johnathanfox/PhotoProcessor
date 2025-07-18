@@ -1,19 +1,62 @@
 # docker-compose.yml
-version: '3.8' # Versão da sintaxe do Docker Compose
+version: '3.8'
 
 services:
-  db: # Nome do serviço do banco de dados
-    image: postgres:16-alpine # Imagem oficial do PostgreSQL. 'alpine' é uma versão leve.
-    restart: always # Garante que o contêiner reinicie automaticamente se parar
-    environment: # Variáveis de ambiente para configurar o PostgreSQL
-      POSTGRES_DB: photodb # Nome do banco de dados que será criado
-      POSTGRES_USER: user # Usuário do banco de dados
-      POSTGRES_PASSWORD: password # Senha do banco de dados
-    ports: # Mapeamento de portas: HOST:CONTAINER
-      - "5432:5432" # A porta 5432 da sua máquina será mapeada para a porta 5432 do contêiner
-    volumes: # Mapeamento de volumes para persistência de dados
-      - pgdata:/var/lib/postgresql/data # <--- O volume deve ser chamado 'pgdata' aqui
+  # Serviço do Banco de Dados PostgreSQL
+  db:
+    image: postgres:16-alpine
+    restart: always
+    environment:
+      POSTGRES_DB: photodb
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432" # Mapeia a porta 5432 do host para a porta 5432 do contêiner
+    volumes:
+      - pgdata:/var/lib/postgresql/data # Persistência dos dados do banco
+    healthcheck: # Adiciona uma verificação de saúde para garantir que o DB está pronto
+      test: ["CMD-SHELL", "pg_isready -U user -d photodb"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
-volumes: # <--- Esta seção na raiz do arquivo DEFINE o volume
-  pgdata: # <--- O nome do volume definido aqui DEVE CORRESPONDER ao usado acima
+  # Serviço da API (PhotoProcessor.Api)
+  api:
+    build:
+      context: .
+      dockerfile: PhotoProcessor.Api/Dockerfile
+    ports:
+      - "5065:8080" # <-- MUDANÇA CRUCIAL AQUI: Mapeando porta 5065 do host para 8080 do contêiner
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__DefaultConnection: "Host=db;Port=5432;Database=photodb;Username=user;Password=password"
+      # Opcional: Para forçar a API a escutar na porta 5065 dentro do contêiner, se preferir
+      # ASPNETCORE_URLS: "http://+:5065"
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - ./PhotoProcessor.Api/uploads:/app/uploads # Mapeia pasta local 'uploads' para dentro do contêiner
+      - ./PhotoProcessor.Api/originals:/app/originals
+      - ./PhotoProcessor.Api/processed:/app/processed
 
+  # Serviço do Worker (PhotoProcessor.Worker)
+  worker:
+    build:
+      context: .
+      dockerfile: PhotoProcessor.Worker/Dockerfile
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__DefaultConnection: "Host=db;Port=5432;Database=photodb;Username=user;Password=password"
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      # Mapeia as pastas locais para dentro do contêiner do Worker
+      # Note que o Worker acessa as mesmas pastas que a API usa para arquivos
+      - ./PhotoProcessor.Api/uploads:/app/PhotoProcessor.Api/uploads
+      - ./PhotoProcessor.Api/originals:/app/PhotoProcessor.Api/originals
+      - ./PhotoProcessor.Api/processed:/app/PhotoProcessor.Api/processed
+
+volumes:
+  pgdata:
