@@ -122,7 +122,7 @@ Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para ma
 
 ## ✉️ Contato
 
-Seu Nome - [@seu_twitter](https://twitter.com/seu_twitter) - seu.email@exemplo.com
+Johnathan M.Andrade - johnathanfoxandrade@gmail.com
 
 Link do Projeto: [https://github.com/seuusuário/PhotoProcessor](https://github.com/seuusuário/PhotoProcessor)
 
