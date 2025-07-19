@@ -1,5 +1,10 @@
 # PhotoProcessor
 
+![Linguagem](https://img.shields.io/badge/C%23-12.0-239120?logo=c-sharp&logoColor=white)
+![Framework](https://img.shields.io/badge/.NET-9.0-512BD4?logo=dotnet&logoColor=white)
+![Status](https://img.shields.io/badge/status-conclu%C3%ADdo-brightgreen)
+![Licença](https://img.shields.io/badge/licen%C3%A7a-MIT-blue)
+
 ## 📷 Sistema de Processamento de Imagens
 
 O PhotoProcessor é uma solução completa para upload, processamento e gerenciamento de imagens, composta por uma API RESTful e um Worker em segundo plano para processamento assíncrono.
