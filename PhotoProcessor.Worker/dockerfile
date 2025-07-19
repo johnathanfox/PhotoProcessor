@@ -1,29 +1,19 @@
-# Dockerfile para PhotoProcessor.Worker
-
-# Fase 1: Build da aplicação
+# Build stage
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
-WORKDIR /src # Define o WORKDIR para a raiz da solução dentro do contêiner
+WORKDIR /src
 
-# Copia o arquivo de solução
-COPY PhotoProcessor.sln .
+# Copy csproj and restore as distinct layers
+COPY ["PhotoProcessor.Worker/PhotoProcessor.Worker.csproj", "PhotoProcessor.Worker/"]
+RUN dotnet restore "PhotoProcessor.Worker/PhotoProcessor.Worker.csproj"
 
-# Copia as pastas de projeto (incluindo .csproj e código-fonte)
-COPY PhotoProcessor.Api/ PhotoProcessor.Api/
-COPY PhotoProcessor.Worker/ PhotoProcessor.Worker/
+# Copy everything else and build
+COPY . .
+WORKDIR "/src/PhotoProcessor.Worker"
+RUN dotnet publish "PhotoProcessor.Worker.csproj" -c Release -o /app/publish
 
-# Restaura as dependências para a SOLUÇÃO INTEIRA
-RUN dotnet restore PhotoProcessor.sln
-
-# Publica a aplicação do Worker
-# ATENÇÃO: Caminho completo para o .csproj a partir de /src
-RUN dotnet publish "PhotoProcessor.Worker/PhotoProcessor.Worker.csproj" -c Release -o /app/publish /p:UseAppHost=false
-
-# Fase 2: Runtime da aplicação
-FROM mcr.microsoft.com/dotnet/runtime:9.0 AS final
+# Build runtime image
+FROM mcr.microsoft.com/dotnet/aspnet:9.0
 WORKDIR /app
-
-# Copia os arquivos publicados da fase de build
 COPY --from=build /app/publish .
 
-# Define o ponto de entrada da aplicação
 ENTRYPOINT ["dotnet", "PhotoProcessor.Worker.dll"]

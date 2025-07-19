@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("PhotoProcessor.Worker")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f63828add50a4916f1cb5cbfd69a918733313a43")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c160f1f55f60f9854efd2ae4bdd68a6c0279ddd2")]
 [assembly: System.Reflection.AssemblyProductAttribute("PhotoProcessor.Worker")]
 [assembly: System.Reflection.AssemblyTitleAttribute("PhotoProcessor.Worker")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

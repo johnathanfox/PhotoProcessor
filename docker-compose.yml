@@ -1,6 +1,4 @@
 # docker-compose.yml
-version: '3.8'
-
 services:
   # Serviço do Banco de Dados PostgreSQL
   db:
@@ -53,10 +51,11 @@ services:
         condition: service_healthy
     volumes:
       # Mapeia as pastas locais para dentro do contêiner do Worker
-      # Note que o Worker acessa as mesmas pastas que a API usa para arquivos
-      - ./PhotoProcessor.Api/uploads:/app/PhotoProcessor.Api/uploads
-      - ./PhotoProcessor.Api/originals:/app/PhotoProcessor.Api/originals
-      - ./PhotoProcessor.Api/processed:/app/PhotoProcessor.Api/processed
+      # Usando caminhos mais simples dentro do contêiner
+      - ./PhotoProcessor.Api/uploads:/app/uploads
+      - ./PhotoProcessor.Api/originals:/app/originals
+      - ./PhotoProcessor.Api/processed:/app/processed
+    working_dir: /app
 
 volumes:
   pgdata:

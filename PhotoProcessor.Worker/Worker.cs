@@ -20,12 +20,14 @@ public class Worker : BackgroundService
     private readonly ILogger<Worker> _logger;
     private readonly IServiceProvider _serviceProvider; // Para criar escopos de DbContext
 
-    // Define os caminhos das pastas que vamos usar (ainda locais por enquanto)
-    // Certifique-se que 'PhotoProcessor.Api' está no mesmo nível que 'PhotoProcessor.Worker'
-    private readonly string _uploadsPath = Path.Combine("..", "PhotoProcessor.Api", "uploads");
-    private readonly string _processedPath = Path.Combine("..", "PhotoProcessor.Api", "processed");
-    private readonly string _originalsPath = Path.Combine("..", "PhotoProcessor.Api", "originals");
+    // Caminhos das pastas - ajustados para funcionar dentro do contêiner
+    private const string UploadsFolder = "uploads";
+    private const string OriginalsFolder = "originals";
+    private const string ProcessedFolder = "processed";
 
+    private readonly string _uploadsPath = Path.Combine(UploadsFolder);
+    private readonly string _processedPath = Path.Combine(ProcessedFolder);
+    private readonly string _originalsPath = Path.Combine(OriginalsFolder);
 
     public Worker(ILogger<Worker> logger, IServiceProvider serviceProvider)
     {
