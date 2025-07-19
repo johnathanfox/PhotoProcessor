@@ -124,7 +124,7 @@ Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para ma
 
 Johnathan M.Andrade - johnathanfoxandrade@gmail.com
 
-Link do Projeto: [https://github.com/seuusuário/PhotoProcessor](https://github.com/seuusuário/PhotoProcessor)
+Link do Projeto: [https://github.com/johnathanfox/PhotoProcessor](https://github.com/johnathanfox/PhotoProcessor)
 
 ## 🙏 Agradecimentos
 
